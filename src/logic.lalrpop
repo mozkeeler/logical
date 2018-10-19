@@ -1,23 +1,26 @@
 use std::str::FromStr;
-use ast::{Formula, Operator};
+use ast::{BinaryOperator, Formula, MonaryOperator};
 
 grammar;
 
 pub Formula: Box<Formula> = {
-    CompoundFormula => <>,
-    Formula Operator CompoundFormula => Box::new(Formula::Op(<>)),
-    <f:Formula> <o:Operator> <v:Variable> =>
-      Box::new(Formula::Op(f, o, Box::new(Formula::Var(v)))),
+    Formula BinaryOperator Term => Box::new(Formula::BinaryOp(<>)),
+    MonaryOperator Term => Box::new(Formula::MonaryOp(<>)),
+    Term => <>,
+};
+
+BinaryOperator: BinaryOperator = {
+    "^" => BinaryOperator::And,
+    "V" => BinaryOperator::Or,
+};
+
+MonaryOperator: MonaryOperator = {
+    "~" => MonaryOperator::Not,
+};
+
+Term: Box<Formula> = {
     Variable => Box::new(Formula::Var(<>)),
-};
-
-Operator: Operator = {
-    "^" => Operator::And,
-    "V" => Operator::Or,
-};
-
-CompoundFormula: Box<Formula> = {
-  "(" <f:Formula> ")" => f,
+    "(" <f:Formula> ")" => f,
 };
 
 Variable: char = {

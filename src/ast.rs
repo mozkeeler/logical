@@ -1,11 +1,17 @@
 #[derive(Debug)]
 pub enum Formula {
     Var(char),
-    Op(Box<Formula>, Operator, Box<Formula>),
+    BinaryOp(Box<Formula>, BinaryOperator, Box<Formula>),
+    MonaryOp(MonaryOperator, Box<Formula>),
 }
 
 #[derive(Debug)]
-pub enum Operator {
+pub enum BinaryOperator {
     And,
     Or,
+}
+
+#[derive(Debug)]
+pub enum MonaryOperator {
+    Not,
 }
