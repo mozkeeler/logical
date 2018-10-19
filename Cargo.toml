@@ -1,0 +1,11 @@
+[package]
+name = "logical"
+version = "0.1.0"
+authors = ["Dana Keeler <mozkeeler@gmail.com>"]
+
+[build-dependencies]
+lalrpop = "0.16.0"
+
+[dependencies]
+lalrpop-util = "0.16.0"
+regex = "1.0.5"

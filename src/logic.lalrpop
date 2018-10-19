@@ -1,0 +1,25 @@
+use std::str::FromStr;
+use ast::{Formula, Operator};
+
+grammar;
+
+pub Formula: Box<Formula> = {
+    CompoundFormula => <>,
+    Formula Operator CompoundFormula => Box::new(Formula::Op(<>)),
+    <f:Formula> <o:Operator> <v:Variable> =>
+      Box::new(Formula::Op(f, o, Box::new(Formula::Var(v)))),
+    Variable => Box::new(Formula::Var(<>)),
+};
+
+Operator: Operator = {
+    "^" => Operator::And,
+    "V" => Operator::Or,
+};
+
+CompoundFormula: Box<Formula> = {
+  "(" <f:Formula> ")" => f,
+};
+
+Variable: char = {
+    r"[a-z]" => char::from_str(<>).unwrap()
+};
